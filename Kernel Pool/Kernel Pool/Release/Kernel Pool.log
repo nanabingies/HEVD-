@@ -1,0 +1,8 @@
+﻿  pool.cpp
+C:\Users\emman\source\repos\Kernel Pool\Kernel Pool\pool.cpp(62): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  6 of 85 functions ( 7.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Kernel Pool.vcxproj -> C:\Users\emman\source\repos\Kernel Pool\Release\Kernel Pool.exe
