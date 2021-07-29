@@ -1,0 +1,6 @@
+﻿  Source.cpp
+C:\Users\emman\source\repos\Arbitrary Overwrite\Arbitrary Overwrite\Source.cpp(70): warning C4244: 'initializing': conversion from 'DWORD64' to 'DWORD', possible loss of data
+C:\Users\emman\source\repos\Arbitrary Overwrite\Arbitrary Overwrite\Source.cpp(80): warning C4244: 'initializing': conversion from 'UINT64' to 'UINT32', possible loss of data
+C:\Users\emman\source\repos\Arbitrary Overwrite\Arbitrary Overwrite\Source.cpp(146): warning C4477: 'printf' : format string '%llx' requires an argument of type 'unsigned __int64', but variadic argument 1 has type 'NtQueryIntervalProfile_t'
+C:\Users\emman\source\repos\Arbitrary Overwrite\Arbitrary Overwrite\Source.cpp(146): warning C4313: 'printf': '%x' in format string conflicts with argument 1 of type 'NtQueryIntervalProfile_t'
+  Arbitrary Overwrite.vcxproj -> C:\Users\emman\source\repos\Arbitrary Overwrite\Debug\Arbitrary Overwrite.exe
