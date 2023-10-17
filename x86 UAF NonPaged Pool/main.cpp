@@ -11,12 +11,12 @@
 #define HACKSYS_EVD_IOCTL_ALLOCATE_FAKE_OBJECT            CTL_CODE(FILE_DEVICE_UNKNOWN, 0x807, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define HACKSYS_EVD_DEVICE_NAME				L"\\\\.\\HackSysExtremeVulnerableDriver"
 
-#define KTHREAD_OFFSET     0x124  // nt!_KPCR.PcrbData.CurrentThread
-#define EPROCESS_OFFSET    0x050  // nt!_KTHREAD.ApcState.Process
-#define PID_OFFSET         0x0B4  // nt!_EPROCESS.UniqueProcessId
-#define FLINK_OFFSET       0x0B8  // nt!_EPROCESS.ActiveProcessLinks.Flink
-#define TOKEN_OFFSET       0x0F8  // nt!_EPROCESS.Token
-#define SYSTEM_PID         0x004  // SYSTEM Process PID
+#define KTHREAD_OFFSET     0x124
+#define EPROCESS_OFFSET    0x050
+#define PID_OFFSET         0x0B4
+#define FLINK_OFFSET       0x0B8
+#define TOKEN_OFFSET       0x0F8
+#define SYSTEM_PID         0x004
 
 using PKTHREAD = PVOID;
 using KEGETCURRENTTHREAD = PKTHREAD(NTAPI*)();
